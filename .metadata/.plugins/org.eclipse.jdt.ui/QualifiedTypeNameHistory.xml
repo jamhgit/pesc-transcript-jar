@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="org.json.JSONObject"/>
-<fullyQualifiedTypeName name="pl.zientarski.SchemaMapper"/>
-<fullyQualifiedTypeName name="org.pesc.message.collegetranscript.v1_6.CollegeTranscript"/>
-<fullyQualifiedTypeName name="org.pesc.message.admissionsapplication.v1_3.AdmissionsApplication"/>
-</qualifiedTypeNameHistroy>
