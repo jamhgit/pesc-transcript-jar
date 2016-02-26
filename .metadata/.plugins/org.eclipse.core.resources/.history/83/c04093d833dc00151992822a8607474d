@@ -1,0 +1,10 @@
+package ca.bccampus.esb.dtos.client;
+
+public class GenerateJSONSchema {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+	}
+
+}

@@ -1,0 +1,909 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- edited with XMLSpy v2011 rel. 2 sp1 (http://www.altova.com) by Jeff Funck (PHEAA) -->
+<!-- created with XMLSpy v2006 rel. 3 sp2 (http://www.altova.com) by Rajiv Kaushik (Florida State University) -->
+<!--=========================================-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:core="urn:org:pesc:core:CoreMain:v1.14.0" xmlns:AdmRec="urn:org:pesc:sector:AdmissionsRecord:v1.3.0" targetNamespace="urn:org:pesc:sector:AdmissionsRecord:v1.3.0" elementFormDefault="unqualified" attributeFormDefault="unqualified" version="v1.3.0">
+	<xs:import namespace="urn:org:pesc:core:CoreMain:v1.14.0" schemaLocation="CoreMain_v1.14.0.xsd"/>
+	<!--============================================================================-->
+	<!--Name:      AdmissionsRecord.xsd (from PESCBaseDataDictionary.xsd 1.3.9 )-->
+	<!--Version:  1.3.0  -->
+	<!--Date: September-2014      -->
+	<!---->
+	<!--ChangeCode Log:-->
+	<!--v1.0.0 30-March-2009 Jeffrey Funck  -  -->
+	<!--Implementation of type definitions required for Admissions Schema. -->
+	<!--   Change #   KB20090302022200-->
+	<!--Implementation of additional UserDefinedExtensions to Admissions Schema as per spreadsheet. -->
+	<!--   Change #   KB20081215050500-->
+	<!--v1.1.0 29-April-2011 Jeffrey Funck  -  -->
+	<!--Added a new Complex Element of Sponser within the ApplicationType Complex Type-->
+	<!--   Change #   TS20110326085800 -->
+	<!--Added a new Complex Element of Language within the ApplicantPersonType Complex Type-->
+	<!--   Change #   TS20110329030100 -->
+	<!--Added a new Simple Element of PartialSSN within the ApplicantPersonType Complex Type-->
+	<!--   Change #   TS20110329030100 -->
+	<!--v1.1.0 31-May-2011 Jeffrey Funck  -  -->
+	<!--Modified to use the OrganizationIDMultiChoiceGroup -->
+	<!--   Change #   TS20100825122400 -->
+	<!--v1.2.0 04-December-2012 Jeffrey Funck  -  -->
+	<!--Modified AgencyIdentifierType to include the simple elements 'AgencyCode', 'AgencyName'  -->
+	<!--and 'CountryCode' after the simple element 'AgencyAssignedID' and added the simple element -->
+	<!--'NoteMessage' after the simple element 'OtherAgency' -->
+	<!--   Change #   TS20121130000002 -->
+	<!--v1.3.0 01-September-2014 Jeffrey Funck  -  -->
+	<!--Modified ContactsType to include the complex element 'PreferredPhone' of core:PhoneType  -->
+	<!--Modified ApplicationType to include the simple element 'ApplicationID' of core:ApplicationIDType  -->
+	<!--Modified ApplicationType to include the simple element 'ApplicationSource' of core:ApplicationSourceType  -->
+	<!--   Change #   MB20140606000001 -->
+	<!--============================================================================-->
+	<!---->
+	<!--=========================================-->
+	<!--CoreComponent Types-->
+	<!--=========================================-->
+	<xs:complexType name="TransmissionDataType">
+		<xs:sequence>
+			<xs:element name="DocumentID" type="core:DocumentIDType"/>
+			<xs:element name="CreatedDateTime" type="core:CreatedDateTimeType"/>
+			<xs:element name="DocumentTypeCode" type="core:DocumentTypeCodeType"/>
+			<xs:element name="TransmissionType" type="core:TransmissionTypeType"/>
+			<xs:element name="Source" type="AdmRec:SourceDestinationType"/>
+			<xs:element name="Destination" type="AdmRec:SourceDestinationType"/>
+			<xs:element name="DocumentProcessCode" type="core:DocumentProcessCodeType" minOccurs="0"/>
+			<xs:element name="DocumentOfficialCode" type="core:DocumentOfficialCodeType" minOccurs="0"/>
+			<xs:element name="DocumentCompleteCode" type="core:DocumentCompleteCodeType" minOccurs="0"/>
+			<xs:element name="RequestTrackingID" type="core:RequestTrackingIDType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplicantType">
+		<xs:annotation>
+			<xs:documentation>Student Type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Person" type="AdmRec:ApplicantPersonType"/>
+			<xs:element name="Family" type="AdmRec:FamilyType" minOccurs="0"/>
+			<xs:element name="Residency" type="AdmRec:ResidencyType" minOccurs="0" maxOccurs="3"/>
+			<xs:element name="Application" type="AdmRec:ApplicationType" maxOccurs="unbounded"/>
+			<xs:element name="HealthCondition" type="core:BasicHealthType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="DisabilityConditionCode" type="core:DisabilityConditionCodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="GovernmentMilitary" type="core:GovernmentMilitaryType" minOccurs="0"/>
+			<xs:element name="SelfReportedAcademicRecord" type="AdmRec:AcademicRecordType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SelfReportedTests" type="AdmRec:TestsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ExtraCurricularActivity" type="AdmRec:ExtraCurricularActivityType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--TransmissionData Types-->
+	<!--=========================================-->
+	<xs:complexType name="SourceDestinationType">
+		<xs:annotation>
+			<xs:documentation>Type for Source and Destination</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="Organization" type="AdmRec:TransmissionOrganizationType"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--SourceDestination Types-->
+	<!--=========================================-->
+	<xs:complexType name="TransmissionOrganizationType">
+		<xs:sequence>
+			<xs:group ref="core:OrganizationIDMultiChoiceGroup"/>
+			<xs:element name="LocalOrganizationID" type="core:LocalOrganizationIDType" minOccurs="0"/>
+			<xs:element name="OrganizationName" type="core:OrganizationNameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Contacts" type="core:ContactsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Applicant Types-->
+	<!--=========================================-->
+	<xs:complexType name="ApplicantPersonType">
+		<xs:sequence>
+			<xs:element name="SchoolAssignedPersonID" type="core:SchoolAssignedPersonIDType" minOccurs="0"/>
+			<xs:element name="SINID" type="core:SINIDType" minOccurs="0"/>
+			<xs:element name="NSNID" type="core:NSNIDType" minOccurs="0"/>
+			<xs:element name="AgencyIdentifier" type="AdmRec:AgencyIdentifierType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="RecipientAssignedID" type="core:RecipientAssignedIDType" minOccurs="0"/>
+			<xs:element name="SSN" type="core:SSNType" minOccurs="0"/>
+			<xs:element name="PartialSSN" type="core:PartialSSNType" minOccurs="0"/>
+			<xs:element name="Birth" type="core:BirthType" minOccurs="0"/>
+			<xs:element name="Name" type="core:NameType"/>
+			<xs:element name="AlternateName" type="core:NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PreferredName" type="core:NameType" minOccurs="0"/>
+			<xs:element name="Citizenship" type="core:CitizenshipType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Contacts" type="AdmRec:ContactsType"/>
+			<xs:element name="Gender" type="core:GenderType" minOccurs="0"/>
+			<xs:element name="EthnicityRace" type="core:EthnicityRaceType" minOccurs="0"/>
+			<xs:element name="CanadianEthnicityRace" type="AdmRec:CanadianEthnicityRaceType" minOccurs="0"/>
+			<xs:element name="ReligiousAffiliationCode" type="core:ReligiousAffiliationCodeType" minOccurs="0"/>
+			<xs:element name="PrivacyRestriction" type="core:PrivacyRestrictionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Immigration" type="AdmRec:ImmigrationType" minOccurs="0"/>
+			<xs:element name="Employment" type="AdmRec:StudentEmploymentType" minOccurs="0" maxOccurs="unbounded"/>
+			<!-- FirstSpokenLanguageCode will be depercated in a future release -->
+			<xs:element name="FirstSpokenLanguageCode" type="core:LanguageCodeType" minOccurs="0"/>
+			<!-- FirstSpokenLanguageCode will be depercated in a future release -->
+			<xs:element name="Language" type="core:LanguageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="MaritalStatusCode" type="core:MaritalStatusCodeType" minOccurs="0"/>
+			<xs:element name="EducationLevel" type="core:EducationLevelType" minOccurs="0"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FamilyType">
+		<xs:annotation>
+			<xs:documentation>Family Type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="ParentsMaritalStatusCode" type="core:ParentsMaritalStatusCodeType" minOccurs="0"/>
+			<xs:element name="FamilyMember" type="AdmRec:AdmissionsPersonType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="FamilyLegacy" type="AdmRec:FamilyLegacyType" minOccurs="0"/>
+			<xs:element name="FamilyIncome" type="AdmRec:FamilyIncomeType" minOccurs="0"/>
+			<xs:element name="FamilyDependents" type="core:FamilyDependentsNumberType" minOccurs="0"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResidencyType">
+		<xs:sequence>
+			<xs:element name="ResidentName" type="core:NameType" minOccurs="0"/>
+			<xs:element name="RelationshipCode" type="core:RelationshipCodeType" minOccurs="0"/>
+			<xs:element name="FinancialDependency" type="AdmRec:FinancialDependencyType" minOccurs="0"/>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType" minOccurs="0"/>
+			<xs:element name="County" type="core:CountyType" minOccurs="0"/>
+			<xs:element name="City" type="core:CityType" minOccurs="0"/>
+			<xs:element name="ResidencyEstablishedDate" type="core:ResidencyEstablishedDateType" minOccurs="0"/>
+			<xs:element name="ResidencyStatusCode" type="core:ResidencyStatusCodeType"/>
+			<xs:element name="DriversLicense" type="AdmRec:DriversLicenseType" minOccurs="0"/>
+			<xs:element name="StateIdentification" type="AdmRec:StateIdentificationType" minOccurs="0"/>
+			<xs:element name="VoterRegistration" type="AdmRec:VoterRegistrationType" minOccurs="0"/>
+			<xs:element name="VehicleRegistration" type="AdmRec:VehicleRegistrationType" minOccurs="0"/>
+			<xs:element name="EmploymentResidency" type="AdmRec:ResidencyEmploymentType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EmploymentAtAppliedSchool" type="core:EmploymentAtAppliedSchoolType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="IncomeTaxInformation" type="AdmRec:IncomeTaxInformationType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PropertyOwned" type="AdmRec:PropertyOwnedType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PublicAssistanceReceived" type="AdmRec:PublicAssistanceReceivedType" minOccurs="0"/>
+			<xs:element name="ActiveDutyMilitary" type="AdmRec:ActiveDutyMilitaryType" minOccurs="0"/>
+			<xs:element name="MemberOfIndianTribe" type="core:MemberOfIndianTribeType" minOccurs="0"/>
+			<xs:element name="LastResidence" type="core:LastResidenceType" minOccurs="0"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplicationType">
+		<xs:sequence>
+			<xs:element name="ApplicationDetail" type="AdmRec:ApplicationDetailType" maxOccurs="unbounded"/>
+			<xs:element name="ApplicationStatement" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="RecommendationReference" type="AdmRec:RecommendationReferenceType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ApplicationQuestion" type="AdmRec:AdmissionsApplicationQuestionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicAwardEarnedPriorToAdmissionCode" type="core:AcademicAwardEarnedPriorToAdmissionCodeType" minOccurs="0"/>
+			<xs:element name="AdditionalStudentAchievements" type="AdmRec:AdditionalStudentAchievementsType" minOccurs="0"/>
+			<xs:element name="ApplicationProcessingGroupCode" type="core:ApplicationProcessingGroupCodeType" minOccurs="0" maxOccurs="10"/>
+			<xs:element name="StudentReleaseCode" type="core:StudentReleaseCodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PlanToApplyFor" type="AdmRec:PlanToApplyForType" minOccurs="0"/>
+			<xs:element name="DecisionToApply" type="AdmRec:DecisionToApplyType" minOccurs="0"/>
+			<xs:element name="HousingInformation" type="AdmRec:HousingInformationType" minOccurs="0"/>
+			<xs:element name="InformationRequested" type="AdmRec:InfoRequestedType" minOccurs="0"/>
+			<xs:element name="ApplicationFee" type="AdmRec:ApplicationFeeType" minOccurs="0"/>
+			<xs:element name="ActivityParticipationRequest" type="AdmRec:ActivityParticipationRequestType" minOccurs="0"/>
+			<xs:element name="PreviousApplication" type="AdmRec:PreviousApplicationType" minOccurs="0"/>
+			<xs:element name="OtherCollegeApplication" type="AdmRec:OtherCollegeApplicationType" minOccurs="0"/>
+			<xs:element name="Sponsor" type="AdmRec:SponsorType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ApplicationID" type="core:ApplicationIDType" minOccurs="0"/>
+			<xs:element name="ApplicationSource" type="core:ApplicationSourceType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicRecordType">
+		<xs:sequence>
+			<xs:element name="School" type="AdmRec:SchoolType" minOccurs="0"/>
+			<xs:element name="FirstDateAttended" type="core:FirstDateAttendedType" minOccurs="0"/>
+			<xs:element name="LastDateAttended" type="core:LastDateAttendedType" minOccurs="0"/>
+			<xs:element name="SchoolAssignedPersonID" type="core:SchoolAssignedPersonIDType" minOccurs="0"/>
+			<xs:element name="StudentLevel" type="core:StudentLevelType" minOccurs="0"/>
+			<xs:element name="AcademicAward" type="AdmRec:AcademicAwardType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicSummary" type="AdmRec:AcademicSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicSession" type="AdmRec:AcademicSessionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Course" type="AdmRec:CourseType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AdditionalStudentAchievements" type="AdmRec:AdditionalStudentAchievementsType" minOccurs="0"/>
+			<xs:element name="HighSchoolSubjectArea" type="AdmRec:HighSchoolSubjectAreaType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ClassRank" type="AdmRec:ClassRankType" minOccurs="0"/>
+			<xs:element name="AcademicProgram" type="AdmRec:AcademicProgramType" minOccurs="0"/>
+			<xs:element name="CollegeCreditEarnedBeforeHighSchoolGraduationCode" type="core:CollegeCreditEarnedBeforeHighSchoolGraduationCodeType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="TestsType">
+		<xs:annotation>
+			<xs:documentation>Tests Type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EducationTestCode" type="core:EducationTestCodeType" minOccurs="0"/>
+			<xs:element name="TestName" type="core:TestNameType" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="TestDate" type="core:TestDateType"/>
+				<xs:element name="TestYearMonth" type="core:TestYearMonthType"/>
+				<xs:element name="TestYear" type="core:TestYearType"/>
+			</xs:choice>
+			<xs:element name="StudentLevel" type="core:StudentLevelType" minOccurs="0"/>
+			<xs:element name="EducationSubtest" type="AdmRec:EducationSubtestType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ScoreValue" type="core:ScoreValueType" minOccurs="0"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdmissionsPersonType">
+		<xs:sequence>
+			<xs:element name="RelationshipCode" type="core:RelationshipCodeType" minOccurs="0"/>
+			<xs:element name="DesignateCode" type="core:DesignateCodeType" minOccurs="0" maxOccurs="2"/>
+			<xs:element name="Birth" type="core:BirthType" minOccurs="0"/>
+			<xs:element name="Name" type="core:NameType"/>
+			<xs:element name="AlternateName" type="core:NameType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Contacts" type="core:ContactsType" minOccurs="0"/>
+			<xs:element name="Gender" type="core:GenderType" minOccurs="0"/>
+			<xs:element name="Marital" type="core:MaritalType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="EthnicityRace" type="core:EthnicityRaceType" minOccurs="0"/>
+			<xs:element name="Citizenship" type="core:CitizenshipType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Deceased" type="core:DeceasedType" minOccurs="0"/>
+			<xs:element name="EducationLevel" type="core:EducationLevelType" minOccurs="0"/>
+			<xs:element name="OccupationDetail" type="core:OccupationDetailType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AttendedCollegeCode" type="core:AttendedCollegeCodeType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="Legacy" type="AdmRec:LegacyType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--ApplicantPerson Types-->
+	<!--=========================================-->
+	<xs:complexType name="ContactsType">
+		<xs:sequence>
+			<xs:element name="PermanentAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="MailingAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="CurrentAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="BillingAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="CampusAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="EmergencyAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="TemporaryAddress" type="core:AddressType" minOccurs="0"/>
+			<xs:element name="OtherAddress" type="core:AddressType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PermanentPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="BusinessPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="CampusPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="EmergencyPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="DayPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="EveningPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="FaxPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="MobilePhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="PagerPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="TemporaryPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="OtherPhone" type="core:PhoneType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PreferredPhone" type="core:PhoneType" minOccurs="0"/>
+			<xs:element name="PrimaryEmail" type="core:EmailType" minOccurs="0"/>
+			<xs:element name="BillingEmail" type="core:EmailType" minOccurs="0"/>
+			<xs:element name="CampusEmail" type="core:EmailType" minOccurs="0"/>
+			<xs:element name="EmergencyEmail" type="core:EmailType" minOccurs="0"/>
+			<xs:element name="OtherEmail" type="core:EmailType" minOccurs="0"/>
+			<xs:element name="TextMessageAddress" type="core:TextMessageAddressType" minOccurs="0"/>
+			<xs:element name="URL" type="core:URLType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="InstantMessage" type="AdmRec:InstantMessageType" minOccurs="0"/>
+			<xs:element name="ContactPreferenceCode" type="core:ContactPreferenceCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ImmigrationType">
+		<xs:sequence>
+			<xs:element name="AlienRegistrationNumber" type="core:AlienRegistrationNumberType" minOccurs="0"/>
+			<xs:element name="AsyleeRefugee" type="AdmRec:AsyleeRefugeeType" minOccurs="0"/>
+			<xs:element name="PermanentResident" type="AdmRec:PermanentResidentType" minOccurs="0"/>
+			<xs:element name="FirstEntryIntoHostCountryDate" type="core:FirstEntryIntoUSDateType" minOccurs="0"/>
+			<xs:element name="ImmigrationI20RequestIndicator" type="core:ImmigrationI20RequestIndicatorType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilityDetail" type="AdmRec:CertificateOfEligibilityDetailType" minOccurs="0"/>
+			<xs:element name="Sponsor" type="AdmRec:SponsorType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="PassportDetail" type="AdmRec:PassportDetailType" minOccurs="0"/>
+			<xs:element name="VisaDetail" type="AdmRec:VisaDetailType" minOccurs="0"/>
+			<xs:element name="I94Detail" type="AdmRec:I94DetailType" minOccurs="0"/>
+			<xs:element name="Dependent" type="AdmRec:DependentType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OptionalPracticalTraining" type="AdmRec:OptionalPracticalTrainingType" minOccurs="0"/>
+			<xs:element name="CurricularPracticalTraining" type="AdmRec:CurricularPracticalTrainingType" minOccurs="0"/>
+			<xs:element name="AcademicTraining" type="AdmRec:AcademicTrainingType" minOccurs="0"/>
+			<xs:element name="CurrentlyInUSCode" type="core:CurrentlyInUSCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Contacts Types-->
+	<!--=========================================-->
+	<xs:complexType name="InstantMessageType">
+		<xs:sequence>
+			<xs:element name="InstantMessageAddress" type="core:InstantMessageAddressType"/>
+			<xs:element name="InstantMessageProviderName" type="core:InstantMessageProviderNameType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Immigration Types-->
+	<!--=========================================-->
+	<!-- JAF 2011/06/03   Modified this ComplexType so as to use the Organization Complex Type which utilizes the OrganizationIDMultiChoiceGroup
+	<xs:complexType name="SponsorType">
+		<xs:sequence>
+			<xs:element name="SponsorOrganization" type="core:OrganizationEntityType" minOccurs="0"/>
+			<xs:element name="FundingSource" type="AdmRec:FundingSourceType" minOccurs="0" maxOccurs="5"/>
+			<xs:element name="SponsorPerson" type="AdmRec:AdmissionsPersonType" minOccurs="0"/>
+			<xs:element name="SponsorCode" type="core:SponsorCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+-->
+	<xs:complexType name="SponsorType">
+		<xs:sequence>
+			<xs:element name="SponsorOrganization" type="AdmRec:ApplicationOrganizationType" minOccurs="0"/>
+			<xs:element name="FundingSource" type="AdmRec:FundingSourceType" minOccurs="0" maxOccurs="5"/>
+			<xs:element name="SponsorPerson" type="AdmRec:AdmissionsPersonType" minOccurs="0"/>
+			<xs:element name="SponsorCode" type="core:SponsorCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Application Types-->
+	<!--=========================================-->
+	<xs:complexType name="ApplicationDetailType">
+		<xs:sequence>
+			<xs:element name="ApplicationSession" type="core:AcademicSessionDetailType"/>
+			<xs:element name="ApplicationDegreeProgram" type="AdmRec:AcademicProgramType" maxOccurs="unbounded"/>
+			<xs:element name="ApplicationOrganization" type="AdmRec:ApplicationOrganizationType" minOccurs="0"/>
+			<xs:element name="CampusName" type="core:CampusNameType" minOccurs="0"/>
+			<xs:element name="EarlyIndicatorCode" type="core:EarlyIndicatorCodeType" minOccurs="0"/>
+			<xs:element name="ApplicationPriority" type="core:ApplicationPriorityType" minOccurs="0"/>
+			<xs:element name="ApplicationWithdrawalIndicator" type="core:ApplicationWithdrawalIndicatorType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StudentEmploymentType">
+		<xs:sequence>
+			<xs:element name="Employer" type="core:OrganizationEntityType" minOccurs="0"/>
+			<xs:element name="EmploymentBeginYearMonth" type="core:EmploymentBeginYearMonthType" minOccurs="0"/>
+			<xs:element name="EmploymentEndYearMonth" type="core:EmploymentEndYearMonthType" minOccurs="0"/>
+			<xs:element name="PositionTitle" type="core:PositionTitleType" minOccurs="0"/>
+			<xs:element name="SchoolAppliedEmployedCode" type="core:FamilyEmployedCodeType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="StateProvinceEmployedCode" type="core:FamilyEmployedCodeType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="EmploymentStatusCode" type="core:EmploymentStatusCodeType" minOccurs="0"/>
+			<xs:element name="EmploymentWeeklyHours" type="core:WeeklyHoursType" minOccurs="0"/>
+			<xs:element name="JobDescription" type="core:JobDescriptionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdmissionsApplicationQuestionType">
+		<xs:sequence>
+			<xs:element name="QuestionTitle" type="core:QuestionTitleType" minOccurs="0"/>
+			<xs:element name="QuestionID" type="core:QuestionIDType" minOccurs="0"/>
+			<xs:element name="QuestionAreaCode" type="core:QuestionAreaCodeType" minOccurs="0"/>
+			<xs:element name="QuestionRequiredCode" type="core:QuestionRequiredCodeType" minOccurs="0"/>
+			<xs:element name="QuestionFormatCode" type="core:QuestionFormatCodeType" minOccurs="0"/>
+			<xs:element name="QuestionText" type="core:QuestionTextType" minOccurs="0"/>
+			<xs:choice minOccurs="0">
+				<xs:element name="AllowedAnswers" type="AdmRec:AllowedAnswersType" minOccurs="0" maxOccurs="50"/>
+				<xs:element name="AnswerText" type="core:AnswerTextType" minOccurs="0"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AdditionalStudentAchievementsType">
+		<xs:sequence>
+			<xs:element name="Language" type="core:LanguageType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="OtherStudentAchievement" type="AdmRec:OtherStudentAchievementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--ApplicationDetail Types-->
+	<!--=========================================-->
+	<xs:complexType name="AcademicProgramType">
+		<xs:sequence>
+			<xs:group ref="core:AcademicProgramCodeGroup" minOccurs="0"/>
+			<!--length? 60-->
+			<xs:element name="AcademicProgramCampus" type="core:AcademicProgramCampusType" minOccurs="0"/>
+			<xs:element name="PlannedEnrollmentStatus" type="core:PlannedEnrollmentStatusType" minOccurs="0"/>
+			<xs:element name="AcademicProgramDegreeLevel" type="core:AcademicProgramDegreeLevelType" minOccurs="0"/>
+			<xs:element name="AcademicProgramPriority" type="core:AcademicProgramPriorityType" minOccurs="0"/>
+			<xs:element name="ApplicationQuestion" type="AdmRec:AdmissionsApplicationQuestionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicProgramDetail" type="AdmRec:AcademicProgramDetailType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--AcademicRecord Types-->
+	<!--=========================================-->
+	<xs:complexType name="SchoolType">
+		<xs:sequence>
+			<xs:element name="OrganizationName" type="core:OrganizationNameType"/>
+			<xs:group ref="core:OrganizationIDMultiChoiceGroup" minOccurs="0"/>
+			<xs:element name="LocalOrganizationID" type="core:LocalOrganizationIDType" minOccurs="0"/>
+			<xs:element name="SchoolOverrideCode" type="core:SchoolOverrideCodeType" minOccurs="0"/>
+			<xs:element name="Contacts" type="core:ContactsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="SecondarySchoolCategoryCode" type="core:SecondarySchoolCategoryCodeType" minOccurs="0"/>
+			<xs:element name="PostsecondarySchoolCategoryCode" type="core:PostsecondarySchoolCategoryCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicAwardType">
+		<xs:sequence>
+			<xs:element name="AcademicAwardLevel" type="core:AcademicAwardLevelType" minOccurs="0"/>
+			<xs:element name="AcademicAwardDate" type="core:AcademicAwardDateType" minOccurs="0"/>
+			<xs:element name="AcademicAwardTitle" type="core:AcademicAwardTitleType" minOccurs="0"/>
+			<xs:element name="AcademicHonors" type="core:AcademicHonorsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicCompletionIndicator" type="core:AcademicCompletionIndicatorType" minOccurs="0"/>
+			<xs:element name="AcademicCompletionDate" type="core:AcademicCompletionDateType" minOccurs="0"/>
+			<xs:element name="AcademicAwardProgram" type="AdmRec:AcademicProgramType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicDegreeRequirement" type="core:AcademicDegreeRequirementType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicSummary" type="AdmRec:AcademicSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicSummaryType">
+		<xs:sequence>
+			<xs:element name="AcademicSummaryCode" type="core:AcademicSummaryTypeType" minOccurs="0"/>
+			<xs:element name="AcademicSummaryLevel" type="core:CourseCreditLevelType" minOccurs="0"/>
+			<xs:element name="GPA" type="core:GPAType" minOccurs="0"/>
+			<xs:element name="AcademicHonors" type="core:AcademicHonorsType" minOccurs="0"/>
+			<xs:element name="ClassRank" type="core:ClassRankType" minOccurs="0"/>
+			<xs:element name="ClassSize" type="core:ClassSizeType" minOccurs="0"/>
+			<xs:element name="AcademicProgram" type="AdmRec:AcademicProgramType" minOccurs="0"/>
+			<xs:element name="Delinquencies" type="core:DelinquenciesType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="ExitDate" type="core:ExitDateType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicSessionType">
+		<xs:sequence>
+			<xs:element name="AcademicSessionDetail" type="core:AcademicSessionDetailType"/>
+			<xs:element name="School" type="AdmRec:SchoolType" minOccurs="0"/>
+			<xs:element name="StudentLevel" type="core:StudentLevelType" minOccurs="0"/>
+			<xs:element name="AcademicProgram" type="AdmRec:AcademicProgramType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicAward" type="AdmRec:AcademicAwardType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Course" type="AdmRec:CourseType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="AcademicSummary" type="AdmRec:AcademicSummaryType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CourseType">
+		<xs:sequence>
+			<xs:element name="CourseCreditBasis" type="core:CourseCreditBasisType"/>
+			<xs:element name="CourseCreditUnits" type="core:CourseCreditUnitsType" minOccurs="0"/>
+			<xs:element name="CourseCreditLevel" type="core:CourseCreditLevelType" minOccurs="0"/>
+			<xs:element name="CourseCreditValue" type="core:CourseCreditValueType" minOccurs="0"/>
+			<xs:element name="CourseCreditEarned" type="core:CourseCreditEarnedType" minOccurs="0"/>
+			<xs:element name="CourseAcademicGradeScaleCode" type="core:CourseAcademicGradeScaleCodeType" minOccurs="0"/>
+			<xs:element name="CourseAcademicGrade" type="core:CourseAcademicGradeType" minOccurs="0"/>
+			<xs:element name="CourseAcademicGradeStatusCode" type="core:CourseAcademicGradeStatusCodeType" minOccurs="0"/>
+			<xs:element name="CourseNarrativeExplanationGrade" type="core:CourseNarrativeExplanationGradeType" minOccurs="0"/>
+			<xs:element name="CourseRepeatCode" type="core:CourseRepeatCodeType" minOccurs="0"/>
+			<xs:choice>
+				<xs:element name="CourseCIPCode" type="core:CourseCIPCodeType" minOccurs="0"/>
+				<xs:element name="CourseCSISCode" type="core:CourseCSISCodeType" minOccurs="0"/>
+				<xs:element name="CourseUSISCode" type="core:CourseUSISCodeType" minOccurs="0"/>
+				<xs:element name="CourseNCESCode" type="core:CourseNCESCodeType" minOccurs="0"/>
+				<xs:element name="CourseSCEDCode" type="core:CourseSCEDCodeType" minOccurs="0"/>
+				<xs:element name="CourseSubjectAreaCode" type="core:CourseSubjectAreaCodeType" minOccurs="0"/>
+			</xs:choice>
+			<xs:element name="CourseQualityPointsEarned" type="core:CourseQualityPointsEarnedType" minOccurs="0"/>
+			<xs:element name="CourseLevel" type="core:CourseLevelType" minOccurs="0"/>
+			<xs:element name="CourseGPAApplicabilityCode" type="core:CourseGPAApplicabilityCodeType" minOccurs="0"/>
+			<xs:element name="CourseSubjectAbbreviation" type="core:CourseSubjectAbbreviationType" minOccurs="0"/>
+			<xs:element name="CourseNumber" type="core:CourseNumberType" minOccurs="0"/>
+			<xs:element name="CourseSectionNumber" type="core:CourseSectionNumberType" minOccurs="0"/>
+			<xs:element name="OriginalCourseID" type="core:OriginalCourseIDType" minOccurs="0"/>
+			<xs:element name="AgencyCourseID" type="core:AgencyCourseIDType" minOccurs="0"/>
+			<xs:element name="CourseTitle" type="core:CourseTitleType" minOccurs="0"/>
+			<xs:element name="CourseAddDate" type="core:CourseAddDateType" minOccurs="0"/>
+			<xs:element name="CourseDropDate" type="core:CourseDropDateType" minOccurs="0"/>
+			<xs:element name="CourseOverrideSchool" type="AdmRec:SchoolType" minOccurs="0"/>
+			<xs:element name="OverrideSchoolCourseNumber" type="core:OverrideSchoolCourseNumberType" minOccurs="0"/>
+			<xs:element name="CourseApplicability" type="core:CourseApplicabilityType" minOccurs="0"/>
+			<xs:element name="CourseBeginDate" type="core:CourseBeginDateType" minOccurs="0"/>
+			<xs:element name="CourseEndDate" type="core:CourseEndDateType" minOccurs="0"/>
+			<xs:element name="CourseInstructionSite" type="core:CourseInstructionSiteType" minOccurs="0"/>
+			<xs:element name="CourseInstructionSiteName" type="core:CourseInstructionSiteNameType" minOccurs="0"/>
+			<xs:element name="Requirement" type="core:RAPType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Attribute" type="core:RAPType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Proficiency" type="core:RAPType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="Licensure" type="core:LicensureType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="LanguageOfInstruction" type="core:LanguageOfInstructionType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Tests Types-->
+	<!--=========================================-->
+	<xs:complexType name="EducationSubtestType">
+		<xs:annotation>
+			<xs:documentation>Education Subtest Type</xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:element name="EducationSubtestCode" type="core:EducationSubtestCodeType" minOccurs="0"/>
+			<xs:element name="SubtestName" type="core:SubtestNameType" minOccurs="0"/>
+			<!--length?40-->
+			<xs:element name="ScoreValue" type="core:ScoreValueType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<!--=========================================-->
+	<!--Types yet to be filed-->
+	<!--=========================================-->
+	<xs:complexType name="ExtraCurricularActivityType">
+		<xs:sequence>
+			<xs:element name="ActivityCode" type="core:StudentActivityCodeType" minOccurs="0"/>
+			<xs:element name="ActivityDescription" type="core:StudentActivityDescriptionType" minOccurs="0"/>
+			<xs:element name="GradeLevel" type="core:StudentActivityGradeLevelType" minOccurs="0"/>
+			<xs:element name="YearMonthBegin" type="core:YearMonthType" minOccurs="0"/>
+			<xs:element name="YearMonthEnd" type="core:YearMonthType" minOccurs="0"/>
+			<xs:element name="Years" type="core:NumberOfYearsType" minOccurs="0"/>
+			<xs:element name="WeeklyHours" type="core:WeeklyHoursType" minOccurs="0"/>
+			<xs:element name="YearlyWeeks" type="core:YearlyWeeksType" minOccurs="0"/>
+			<xs:element name="Recognitions" type="core:StudentActivityRecognitionsType" minOccurs="0"/>
+			<xs:element name="ActivityScopeCode" type="core:StudentActivityScopeCodeType" minOccurs="0"/>
+			<xs:element name="ActivitySponsorOrganizationName" type="core:OrganizationNameType" minOccurs="0"/>
+			<xs:element name="LeadershipPosition" type="core:LeadershipPositionType" minOccurs="0"/>
+			<xs:element name="LeadershipCharacteristicCode" type="core:LeadershipCharacteristicCodeType" minOccurs="0"/>
+			<xs:element name="UserDefinedExtensions" type="core:UserDefinedExtensionsType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AgencyIdentifierType">
+		<xs:sequence>
+			<xs:element name="AgencyAssignedID" type="core:AgencyAssignedIDType" minOccurs="0"/>
+			<xs:element name="AgencyCode" type="core:AgencyCodeType" minOccurs="0"/>
+			<xs:element name="AgencyName" type="core:AgencyNameType" minOccurs="0"/>
+			<xs:element name="CountryCode" type="core:CountryCodeType" minOccurs="0"/>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType" minOccurs="0"/>
+			<xs:element name="OtherAgency" type="core:OtherAgencyType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CanadianEthnicityRaceType">
+		<xs:sequence>
+			<xs:element name="CanadianEthnicityCode" type="core:CanadianEthnicityCodeType"/>
+			<xs:element name="LegalStatusCode" type="core:CanadianLegalStatusCodeType" minOccurs="0"/>
+			<xs:element name="TreatyCode" type="core:TreatyCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FamilyLegacyType">
+		<xs:sequence>
+			<xs:element name="LegacyGraduateCode" type="core:LegacyGraduateCodeType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="LegacyAlumniCode" type="core:LegacyAlumniCodeType" minOccurs="0" maxOccurs="4"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FamilyIncomeType">
+		<xs:sequence>
+			<xs:element name="MaximumFamilyIncomeAmount" type="core:MaximumFamilyIncomeAmountType" minOccurs="0"/>
+			<xs:element name="MinimumFamilyIncomeAmount" type="core:MinimumFamilyIncomeAmountType" minOccurs="0"/>
+			<xs:element name="FamilyIncomeAmount" type="core:FamilyIncomeAmountType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FinancialDependencyType">
+		<xs:sequence>
+			<xs:element name="DependencyStatusCode" type="core:DependencyStatusCodeType" minOccurs="0"/>
+			<xs:element name="FinancialDependencyDate" type="core:FinancialDependencyDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DriversLicenseType">
+		<xs:sequence>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType"/>
+			<xs:element name="DriversLicenseNumber" type="core:DriversLicenseNumberType" minOccurs="0"/>
+			<xs:element name="FirstIssueDate" type="core:FirstIssueDateType" minOccurs="0"/>
+			<xs:element name="LastIssueDate" type="core:LastIssueDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="StateIdentificationType">
+		<xs:sequence>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType"/>
+			<xs:element name="StateIdentificationNumber" type="core:DriversLicenseNumberType" minOccurs="0"/>
+			<xs:element name="FirstIssueDate" type="core:FirstIssueDateType" minOccurs="0"/>
+			<xs:element name="LastIssueDate" type="core:LastIssueDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VoterRegistrationType">
+		<xs:sequence>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType"/>
+			<xs:element name="County" type="core:CountyType" minOccurs="0"/>
+			<xs:element name="VoterRegistrationDistrict" type="core:VoterRegistrationDistrictType" minOccurs="0"/>
+			<xs:element name="City" type="core:CityType" minOccurs="0"/>
+			<xs:element name="VoterRegistrationNumber" type="core:VoterRegistrationNumberType" minOccurs="0"/>
+			<xs:element name="FirstIssueDate" type="core:FirstIssueDateType" minOccurs="0"/>
+			<xs:element name="LastIssueDate" type="core:LastIssueDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VehicleRegistrationType">
+		<xs:sequence>
+			<xs:element name="StateProvinceCode" type="core:StateProvinceCodeType"/>
+			<xs:element name="OwnerName" type="core:VehicleRegistrationOwnerNameType"/>
+			<xs:element name="VehicleRegistrationNumber" type="core:VehicleRegistrationNumberType" minOccurs="0"/>
+			<xs:element name="FirstIssueDate" type="core:FirstIssueDateType" minOccurs="0"/>
+			<xs:element name="LastIssueDate" type="core:LastIssueDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ResidencyEmploymentType">
+		<xs:sequence>
+			<xs:element name="FullTimeFlag" type="core:FullTimeFlagType" minOccurs="0"/>
+			<xs:element name="EmploymentBeginDate" type="core:EmploymentBeginDateType" minOccurs="0"/>
+			<xs:element name="EmploymentEndDate" type="core:EmploymentEndDateType" minOccurs="0"/>
+			<xs:element name="EmployerName" type="core:EmployerNameType" minOccurs="0"/>
+			<xs:element name="EmploymentLocation" type="core:EmploymentLocationType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="IncomeTaxInformationType">
+		<xs:sequence>
+			<xs:element name="IncomeTaxState" type="core:StateProvinceCodeType" minOccurs="0"/>
+			<xs:element name="IncomeTaxYear" type="core:IncomeTaxYearType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PropertyOwnedType">
+		<xs:sequence>
+			<xs:element name="PropertyPurchaseDate" type="core:PropertyPurchaseDateType" minOccurs="0"/>
+			<xs:element name="PropertyState" type="core:StateProvinceCodeType" minOccurs="0"/>
+			<xs:element name="PropertyCounty" type="core:CountyType" minOccurs="0"/>
+			<xs:element name="HomesteadExemptionClaimedCode" type="core:HomesteadExemptionClaimedCodeType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PublicAssistanceReceivedType">
+		<xs:sequence>
+			<xs:element name="PublicAssistanceState" type="core:StateProvinceCodeType" minOccurs="0"/>
+			<xs:element name="PublicAssistanceCounty" type="core:CountyType" minOccurs="0"/>
+			<xs:element name="PublicAssistanceDistrict" type="core:PublicAssistanceDistrictType" minOccurs="0"/>
+			<xs:element name="PublicAssistanceCity" type="core:PublicAssistanceCityType" minOccurs="0"/>
+			<xs:element name="BeginDate" type="core:BeginDateType" minOccurs="0"/>
+			<xs:element name="EndDate" type="core:EndDateType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ActiveDutyMilitaryType">
+		<xs:sequence>
+			<xs:element name="MilitaryDutyBranch" type="core:MilitaryDutyBranchType" minOccurs="0"/>
+			<xs:element name="MilitaryDutyLocation" type="core:MilitaryDutyLocationType" minOccurs="0"/>
+			<xs:element name="MilitaryDutyBeginDate" type="core:MilitaryDutyBeginDateType" minOccurs="0"/>
+			<xs:element name="MilitaryDutyEndDate" type="core:MilitaryDutyEndDateType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="RecommendationReferenceType">
+		<xs:sequence>
+			<xs:element name="RefereeName" type="core:NameType"/>
+			<xs:element name="RefereeContacts" type="core:ContactsType" minOccurs="0"/>
+			<xs:element name="RefereeOrganization" type="core:OrganizationEntityType" minOccurs="0"/>
+			<xs:element name="RefereePositionInOrganization" type="core:PositionTitleType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PlanToApplyForType">
+		<xs:sequence>
+			<xs:element name="PlanToApplyForCode" type="core:PlanToApplyForCodeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DecisionToApplyType">
+		<xs:sequence>
+			<xs:element name="ApplyDecision" type="AdmRec:ApplyDecisionType" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HousingInformationType">
+		<xs:sequence>
+			<xs:element name="HousingInformationCode" type="core:HousingInformationCodeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="InfoRequestedType">
+		<xs:sequence>
+			<xs:element name="InterestedInCode" type="core:InterestedInCodeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplicationFeeType">
+		<xs:sequence>
+			<xs:element name="ApplicationFeeAmount" type="core:ApplicationFeeAmountType" minOccurs="0"/>
+			<xs:element name="PaymentMethodCode" type="core:PaymentMethodCodeType" minOccurs="0"/>
+			<xs:element name="FeeWaiverBasisCode" type="core:FeeWaiverBasisCodeType" minOccurs="0"/>
+			<xs:element name="CardIssuerCode" type="core:CreditCardIssuerCodeType" minOccurs="0"/>
+			<xs:element name="CardNumber" type="core:CreditCardNumberType" minOccurs="0"/>
+			<xs:element name="CardNumberLast4" type="core:CreditCardNumberLast4Type" minOccurs="0"/>
+			<xs:element name="CardExpirationDate" type="core:CreditCardExpirationDateType" minOccurs="0"/>
+			<xs:element name="NameOnCard" type="core:NameOnCardType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ActivityParticipationRequestType">
+		<xs:sequence>
+			<xs:element name="ActivityCode" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PreviousApplicationType">
+		<xs:sequence>
+			<xs:element name="SessionDesignator" type="core:SessionDesignatorType" minOccurs="0"/>
+			<xs:element name="CampusName" type="core:CampusNameType" minOccurs="0"/>
+			<xs:element name="AcademicProgramName" type="core:AcademicProgramNameType" minOccurs="0"/>
+			<xs:element name="SchoolAssignedPersonID" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherCollegeApplicationType">
+		<xs:sequence>
+			<xs:element name="OtherCollege" type="AdmRec:OtherCollegeType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="HighSchoolSubjectAreaType">
+		<xs:sequence>
+			<xs:element name="HighSchoolSubjectAreaCode" type="core:HighSchoolSubjectAreaCodeType" minOccurs="0"/>
+			<xs:element name="CourseCreditValue" type="core:CourseCreditValueType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ClassRankType">
+		<xs:sequence>
+			<xs:element name="ClassSize" type="core:ClassSizeType" minOccurs="0"/>
+			<xs:element name="ClassRank" type="core:ClassRankType" minOccurs="0"/>
+			<xs:element name="ClassPercentileRank" type="core:ClassPercentileRankType" minOccurs="0"/>
+			<xs:element name="ClassRankOther" type="core:ClassRankOtherType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AsyleeRefugeeType">
+		<xs:sequence>
+			<xs:element name="IssueDate" type="core:AsyleeRefugeeIssueDateType" minOccurs="0"/>
+			<xs:element name="DocumentExpirationDate" type="core:AsyleeRefugeeExpirationDateType" minOccurs="0"/>
+			<xs:element name="AppliedDate" type="core:AsyleeRefugeeAppliedDateType" minOccurs="0"/>
+			<xs:element name="AppliedCode" type="core:AppliedCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PermanentResidentType">
+		<xs:sequence>
+			<xs:element name="IssueDate" type="core:PermanentResidentIssueDateType" minOccurs="0"/>
+			<xs:element name="DocumentExpirationDate" type="core:PermanentResidentExpirationDateType" minOccurs="0"/>
+			<xs:element name="AppliedDate" type="core:PermanentResidentAppliedDateType" minOccurs="0"/>
+			<xs:element name="AppliedCode" type="core:AppliedCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CertificateOfEligibilityDetailType">
+		<xs:sequence>
+			<xs:element name="CertificateOfEligibilityID" type="core:CertificateOfEligibilityIDType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilityIssueDate" type="core:CertificateOfEligibilityIssueDateType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilityExpirationDate" type="core:CertificateOfEligibilityExpirationDateType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilityProgramName" type="core:CertificateOfEligibilityProgramNameType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilitySchoolName" type="core:CertificateOfEligibilitySchoolNameType" minOccurs="0"/>
+			<xs:element name="CertificateOfEligibilitySchoolCode" type="core:CertificateOfEligibilitySchoolCodeType" minOccurs="0"/>
+			<xs:element name="ExchangeVisitorPositionCode" type="core:ExchangeVisitorPositionCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="PassportDetailType">
+		<xs:sequence>
+			<xs:element name="PassportInformationAvailableCode" type="core:PassportInformationAvailableCodeType" minOccurs="0"/>
+			<xs:element name="IssuingCountryCode" type="core:PassportIssuingCountryCodeType" minOccurs="0"/>
+			<xs:element name="DocumentExpirationDate" type="core:PassportExpirationDateType" minOccurs="0"/>
+			<xs:element name="PassportNumber" type="core:PassportNumberType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="VisaDetailType">
+		<xs:sequence>
+			<xs:element name="VisaIssuingPostCode" type="core:VisaIssuingPostCodeType" minOccurs="0"/>
+			<xs:element name="NonImmigrantVisaNumber" type="core:NonImmigrantVisaNumberType" minOccurs="0"/>
+			<xs:element name="NonImmigrantVisaType" type="core:NonImmigrantVisaType" minOccurs="0"/>
+			<xs:element name="NonImmigrantVisaIssueDate" type="core:NonImmigrationVisaIssueDateType" minOccurs="0"/>
+			<xs:element name="VisaExpirationDate" type="core:VisaExpirationDateType" minOccurs="0"/>
+			<xs:element name="VisaReasonForUSBornCode" type="core:VisaReasonForUSBornCodeType" minOccurs="0"/>
+			<xs:element name="VisaControlNumber" type="core:VisaControlNumberType" minOccurs="0"/>
+			<xs:element name="NonImmigrantVisaAppliedFor" type="core:NonImmigrantVisaType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="I94DetailType">
+		<xs:sequence>
+			<xs:element name="I94AdmissionNumber" type="core:I94AdmissionNumberType" minOccurs="0"/>
+			<xs:element name="I94PortOfEntryCode" type="core:I94PortOfEntryCodeType" minOccurs="0"/>
+			<xs:element name="I94DateOfEntry" type="core:I94DateOfEntryType" minOccurs="0"/>
+			<xs:element name="I94ExpirationDate" type="core:I94ExpirationDateType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="DependentType">
+		<xs:sequence>
+			<xs:element name="Name" type="core:NameType" minOccurs="0"/>
+			<xs:element name="RelationshipCode" type="core:RelationshipCodeType" minOccurs="0"/>
+			<xs:element name="Birth" type="core:BirthType" minOccurs="0"/>
+			<xs:element name="Citizenship" type="core:CitizenshipType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OptionalPracticalTrainingType">
+		<xs:sequence>
+			<xs:element name="SchoolName" type="core:TrainingSchoolNameType" minOccurs="0"/>
+			<xs:element name="BeginDate" type="core:BeginDateType" minOccurs="0"/>
+			<xs:element name="EndDate" type="core:EndDateType" minOccurs="0"/>
+			<xs:element name="OPTStatusCode" type="core:OPTStatusCodeType" minOccurs="0"/>
+			<xs:element name="OPTTrainingLevelCode" type="core:TrainingLevelCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="CurricularPracticalTrainingType">
+		<xs:sequence>
+			<xs:element name="SchoolName" type="core:TrainingSchoolNameType" minOccurs="0"/>
+			<xs:element name="BeginDate" type="core:BeginDateType" minOccurs="0"/>
+			<xs:element name="EndDate" type="core:EndDateType" minOccurs="0"/>
+			<xs:element name="CPTStatusCode" type="core:CPTStatusCodeType" minOccurs="0"/>
+			<xs:element name="CPTTrainingLevelCode" type="core:TrainingLevelCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicTrainingType">
+		<xs:sequence>
+			<xs:element name="SchoolName" type="core:TrainingSchoolNameType" minOccurs="0"/>
+			<xs:element name="BeginDate" type="core:BeginDateType" minOccurs="0"/>
+			<xs:element name="EndDate" type="core:EndDateType" minOccurs="0"/>
+			<xs:element name="AcademicTrainingStatusCode" type="core:AcademicTrainingStatusCodeType" minOccurs="0"/>
+			<xs:element name="AcademicTrainingLevelCode" type="core:TrainingLevelCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="FundingSourceType">
+		<xs:sequence>
+			<xs:element name="FundingAmount" type="core:FundingAmountType" minOccurs="0"/>
+			<xs:element name="FundingSourceCode" type="core:FundingSourceCodeType" minOccurs="0"/>
+			<xs:element name="FundingSourceName" type="core:FundingSourceNameType" minOccurs="0"/>
+			<xs:element name="FundingSourceCountry" type="core:CountryCodeType" minOccurs="0"/>
+			<xs:element name="FundingSourceContact" type="core:ContactsType" minOccurs="0"/>
+			<xs:element name="StartingYearMonth" type="core:YearMonthType" minOccurs="0"/>
+			<xs:element name="EndingYearMonth" type="core:YearMonthType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherStudentAchievementType">
+		<xs:sequence>
+			<xs:element name="AchievementCategoryCode" type="core:AchievementCategoryCodeType" minOccurs="0"/>
+			<xs:element name="AchievementTitle" type="core:AchievementTitleType" minOccurs="0"/>
+			<xs:element name="SponsorName" type="core:SponsorNameType" minOccurs="0"/>
+			<xs:element name="StudentLevelCode" type="core:StudentLevelCodeType" minOccurs="0"/>
+			<xs:element name="AchievementAwardYear" type="core:StudentAchievementAwardYearType" minOccurs="0"/>
+			<xs:element name="AchievementAwardYearMonth" type="core:StudentAchievementAwardYearMonthType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AcademicProgramDetailType">
+		<xs:sequence>
+			<xs:element name="AcademicProgramType" type="core:AcademicProgramTypeType" minOccurs="0"/>
+			<xs:element name="AcademicProgramName" type="core:AcademicProgramNameType" minOccurs="0"/>
+			<xs:element name="AcademicProgramPriority" type="core:AcademicProgramPriorityType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="AllowedAnswersType">
+		<xs:sequence>
+			<xs:element name="AllowedAnswerText" type="core:AllowedAnswerTextType"/>
+			<xs:element name="AnswerSelectedCode" type="core:AnswerSelectedCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplyDecisionType">
+		<xs:sequence>
+			<xs:element name="DecisionToApplyCode" type="core:DecisionToApplyCodeType" minOccurs="0"/>
+			<xs:element name="DecisionRank" type="core:DecisionRankType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="OtherCollegeType">
+		<xs:sequence>
+			<xs:element name="OtherCollegeName" type="core:OtherCollegeNameType" minOccurs="0"/>
+			<xs:element name="OtherCollegeLocation" type="core:OtherCollegeLocationType" minOccurs="0"/>
+			<xs:element name="OtherCollegeState" type="core:StateProvinceCodeType" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="LegacyType">
+		<xs:sequence>
+			<xs:element name="SchoolBeganYear" type="core:SchoolBeganYearType" minOccurs="0"/>
+			<xs:element name="SchoolEndedYear" type="core:SchoolEndedYearType" minOccurs="0"/>
+			<xs:element name="SchoolName" type="core:SchoolNameType" minOccurs="0"/>
+			<xs:element name="AcademicAwardTitle" type="core:AcademicAwardTitleType" minOccurs="0"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="ApplicationOrganizationType">
+		<xs:annotation>
+			<xs:documentation> *adm* new </xs:documentation>
+		</xs:annotation>
+		<xs:sequence>
+			<xs:group ref="core:OrganizationIDMultiChoiceGroup" minOccurs="0"/>
+			<xs:element name="LocalOrganizationID" type="core:LocalOrganizationIDType" minOccurs="0"/>
+			<xs:element name="OrganizationName" type="core:OrganizationNameType" maxOccurs="unbounded"/>
+			<xs:element name="Contacts" type="core:ContactsType" minOccurs="0" maxOccurs="unbounded"/>
+			<xs:element name="NoteMessage" type="core:NoteMessageType" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+</xs:schema>

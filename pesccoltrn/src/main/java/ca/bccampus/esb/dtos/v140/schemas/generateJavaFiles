@@ -1,0 +1,10 @@
+#!/bin/bash
+
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b CollegeTranscript.xjc CollegeTranscript_v1.6.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b HighSchoolTranscript.xjc HighSchoolTranscript_v1.5.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b AcademicRecordBatch.xjc AcademicRecordBatch_v2.1.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b TranscriptRequest.xjc TranscriptRequest_v1.4.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b TranscriptResponse.xjc TranscriptResponse_v1.4.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b TranscriptAcknowledgement.xjc TranscriptAcknowledgement_v1.3.0.xsd 
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b AdmissionsRecord.xjc AdmissionsRecord_v1.3.0.xsd
+xjc -nv -extension -d /opte/pesccoltrnjar/src -b AdmissionsApplication.xjc AdmissionsApplication_v1.3.0.xsd
